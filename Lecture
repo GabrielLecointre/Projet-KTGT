@@ -1,3 +1,0 @@
-library(readxl)
-BDJO <- readxl_example("\\filer-eleves2\id2626\Downloads\BDProjetTD.xlsx")
-read_excel(BDJO)
