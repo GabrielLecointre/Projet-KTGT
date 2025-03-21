@@ -1,6 +1,7 @@
 import pandas
+import os
 
-# Lire le fichier Excel avec la base de données
-BDJO = pandas.read_excel(r"\\filer-eleves2\id2626\Downloads\BDProjetTD.xlsx")
-print("* Tableau Excel du fichier :")
+# Lire le fichier .csv avec la base de données
+BDJO = pandas.read_csv(os.path.join("donnees_jeux_olympiques", "athlete_events.csv"))
+print("* Tableau du fichier :")
 print(BDJO)
