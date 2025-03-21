@@ -1,4 +1,4 @@
-# Projet-traitement-de-donn-es-KTGT
+# Projet-KTGT
 
 TEST
 test approuvé
