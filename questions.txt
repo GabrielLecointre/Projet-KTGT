@@ -2,18 +2,19 @@ Déterminez le nombre de médailles gagnées par Michael Phelps. Son nom complet
 Trouvez des bornes inférieures et supérieures pour le nombre de médailles par nation pour les Jeux Olympiques de 2016.
 The most titled woman in history is American athlete Allyson Felix, with 11 Olympics medals in sprint events.
 
-T: Only four athletes have won medals in both the Winter and the Summer Olympics. Only one of them, Christa Ludinger-Rothenburger, won medals in the same year.
-T: Jeux de Los Angeles 1984 : Quelle a été la performance détaillée de la Roumanie lors des JO de 1984, où elle a terminé deuxième au classement des médailles avec 20 médailles d'or, 16 d'argent et 17 de bronze ?
-T: Exploit de Nadia Comăneci : Quels ont été les résultats spécifiques de Nadia Comăneci lors des JO de 1976, quelles épreuves ?
+Teodora: Only four athletes have won medals in both the Winter and the Summer Olympics. Only one of them, Christa Ludinger-Rothenburger, won medals in the same year.
+Teodora: Jeux de Los Angeles 1984 : Quelle a été la performance détaillée de la Roumanie lors des JO de 1984, où elle a terminé deuxième au classement des médailles avec 20 médailles d'or, 16 d'argent et 17 de bronze ?
+Teodora: Exploit de Nadia Comăneci : Quels ont été les résultats spécifiques de Nadia Comăneci lors des JO de 1976, quelles épreuves ?
+
+Gabriel : comment la taille et le poids des athlètes varient-ils selon les sports ?
+Gabriel : quels sont les sports qui ont vu le plus de participants au fil des années ?
+Gabriel : quels sont les 10 pays ayant remporté au moins une médaille dans le maximum d'éditions différentes des Jeux Olympiques ? pour le premier pays dans ce classement, cela correspond-il à au moins une médaille à chaque Jeux Olympiques ? 
 
 Quelle nation a remporté le plus de médailles aux Jeux Olympiques de 2016 ?
-Quel athlète a gagné le plus de médailles d’or dans l’histoire des JO ?
 Quelle est la répartition des médailles par sexe pour les JO de 2016 ?
-Comment la taille et le poids des athlètes varient-ils selon les sports ?
-Quels sont les sports qui ont vu le plus de participants au fil des années ?
 Quelle est la corrélation entre l’âge des athlètes et leurs performances en termes de médailles gagnées ?
 Quel est le pays qui a accueilli le plus souvent les Jeux Olympiques ?
-Quels sont les pays ayant remporté au moins une médaille dans tous les Jeux Olympiques ?
+
 Quel sport a vu le plus grand nombre de records olympiques être battus ?
 Comment la participation des femmes aux Jeux Olympiques a-t-elle évolué depuis leur création ?
 Tarzan competed in the Olympics: Johnny Weissmuller, an athlete-turned-actor who played Tarzan in 12 movies, won five gold medals in swimming in the 1920s.
