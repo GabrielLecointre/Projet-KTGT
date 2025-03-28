@@ -1,5 +1,11 @@
 Déterminez le nombre de médailles gagnées par Michael Phelps. Son nom complet est Michael Fred Phelps, II.
 Trouvez des bornes inférieures et supérieures pour le nombre de médailles par nation pour les Jeux Olympiques de 2016.
+The most titled woman in history is American athlete Allyson Felix, with 11 Olympics medals in sprint events.
+
+T: Only four athletes have won medals in both the Winter and the Summer Olympics. Only one of them, Christa Ludinger-Rothenburger, won medals in the same year.
+T: Jeux de Los Angeles 1984 : Quelle a été la performance détaillée de la Roumanie lors des JO de 1984, où elle a terminé deuxième au classement des médailles avec 20 médailles d'or, 16 d'argent et 17 de bronze ?
+T: Exploit de Nadia Comăneci : Quels ont été les résultats spécifiques de Nadia Comăneci lors des JO de 1976, quelles épreuves ?
+
 Quelle nation a remporté le plus de médailles aux Jeux Olympiques de 2016 ?
 Quel athlète a gagné le plus de médailles d’or dans l’histoire des JO ?
 Quelle est la répartition des médailles par sexe pour les JO de 2016 ?
@@ -10,14 +16,11 @@ Quel est le pays qui a accueilli le plus souvent les Jeux Olympiques ?
 Quels sont les pays ayant remporté au moins une médaille dans tous les Jeux Olympiques ?
 Quel sport a vu le plus grand nombre de records olympiques être battus ?
 Comment la participation des femmes aux Jeux Olympiques a-t-elle évolué depuis leur création ?
-Only four athletes have won medals in both the Winter and the Summer Olympics. Only one of them, Christa Ludinger-Rothenburger, won medals in the same year.
-Jeux de Los Angeles 1984 : Quelle a été la performance détaillée de la Roumanie lors des JO de 1984, où elle a terminé deuxième au classement des médailles avec 20 médailles d'or, 16 d'argent et 17 de bronze ?
-Exploit de Nadia Comăneci : Quels ont été les résultats spécifiques de Nadia Comăneci lors des JO de 1976, quelles épreuves ?
 Tarzan competed in the Olympics: Johnny Weissmuller, an athlete-turned-actor who played Tarzan in 12 movies, won five gold medals in swimming in the 1920s.
 In 1900, it was a Frenchman, Charles Devendeville, who won the event by swimming 60 meters in 1 minute and 8 seconds, becoming the first French Olympic swimming champion.
 1st woman to win an Olympic gold medal: Charlotte Cooper (UK) in 1900 for tennis.
 The oldest Olympic medalist in history: the Swede Oscar Swahn won the silver medal in the men’s 100-meter team running deer, double shots event, at the age of 72.
 The youngest Olympic medalist: the Greek gymnast Dimítrios Loúndras won a bronze medal in Athens in 1896 at almost 11 years old, in the team event of parallel bars. The youngest athlete to win the Olympics title is a young girl, Marjorie Gestring (USA), who won the gold medal in the three-meter diving event in 1936 at the age of 13.
 The record for the number of medals is held by American Michael Phelps. He has won 28 medals in 4 Olympiads, including 23 titles (also a record).
-The most titled woman in history is American athlete Allyson Felix, with 11 Olympics medals in sprint events.
+
 Artistic Olympic events: Between 1912 and 1948, 150 medals were awarded in the fields of painting, sculpture, music, literature, and architecture. To participate, artists had to send their works related to sport to the Olympic Committee of their country, which pre-selected them before a major exhibition during the Games. The winners chosen by the jury then were awarded medals. See the list of Olympic medalists in artistic competitions here.
