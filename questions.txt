@@ -1,3 +1,5 @@
+Déterminez le nombre de médailles gagnées par Michael Phelps. Son nom complet est Michael Fred Phelps, II.
+Trouvez des bornes inférieures et supérieures pour le nombre de médailles par nation pour les Jeux Olympiques de 2016.
 Quelle nation a remporté le plus de médailles aux Jeux Olympiques de 2016 ?
 Quel athlète a gagné le plus de médailles d’or dans l’histoire des JO ?
 Quelle est la répartition des médailles par sexe pour les JO de 2016 ?
