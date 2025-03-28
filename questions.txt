@@ -10,6 +10,10 @@ Gabriel : comment la taille et le poids des athlètes varient-ils selon les spor
 Gabriel : quels sont les sports qui ont vu le plus de participants au fil des années ?
 Gabriel : quels sont les 10 pays ayant remporté au moins une médaille dans le maximum d'éditions différentes des Jeux Olympiques ? pour le premier pays dans ce classement, cela correspond-il à au moins une médaille à chaque Jeux Olympiques ? 
 
+Tual : quel sportif a participé au plus d'épreuves sans jamais être médaillé ?
+Tual : quelle édition a accueilli le plus de sportifs ne concourant pas sous le drapeau d'un pays ?
+Tual : combien de sportifs ont changé de délégation, dans quels sports ?
+
 Quelle nation a remporté le plus de médailles aux Jeux Olympiques de 2016 ?
 Quelle est la répartition des médailles par sexe pour les JO de 2016 ?
 Quelle est la corrélation entre l’âge des athlètes et leurs performances en termes de médailles gagnées ?
