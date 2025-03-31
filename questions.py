@@ -7,7 +7,9 @@ texte = "Alice,23,17.5"
 print(texte.split(","))  # ["Alice", "23", "17.5"]
 
 # Lire le fichier CSV manuellement et stocker les lignes dans une liste
-with open('donnees_jeux_olympiques/athlete_events.csv', 'r', encoding='utf-8') as donnees:
+with open(
+    "donnees_jeux_olympiques/athlete_events.csv", "r", encoding="utf-8"
+) as donnees:
     lignes = donnees.readlines()  # Lire toutes les lignes
 
 # Convertir en tableau (liste de listes)
@@ -20,7 +22,8 @@ print(len(tableau), len(tableau[0]))
 # Michael Fred Phelps, II.
 # Attention lors du split(), le séparateur pris en compte est la virgule
 # donc le II a été créé dans une autre colonne
-# il pourrait y avoir Michael Fred Phelps, II et Michael Fred Phelps : 2 personnes différentes
+# il pourrait y avoir Michael Fred Phelps, II et Michael Fred Phelps : 2 personnes
+# différentes
 nb_rows = len(tableau)
 n_cols = len(tableau[0])
 
@@ -33,7 +36,7 @@ for i in range(nb_rows):
         print(tableau[i][1], tableau[i][2])
         if tableau[i][14] is None:
             no_medaille += 1
-        elif ("Gold" or "Silver" or "Bronze" in tableau[i][15]):
+        elif "Gold" or "Silver" or "Bronze" in tableau[i][15]:
             medaille += 1
 print(no_medaille, medaille, compt)
 
@@ -45,7 +48,9 @@ for i in range(nb_rows):
         compt += 1
         if tableau[i][14] is None:  # Si la médaille est None (manquante)
             no_medaille += 1
-        elif any(medal in tableau[i][14] for medal in ["Gold", "Silver", "Bronze"]):  # Vérifie si la médaille est or, argent ou bronze
+        elif any(
+            medal in tableau[i][14] for medal in ["Gold", "Silver", "Bronze"]
+        ):  # Vérifie si la médaille est or, argent ou bronze
             medaille += 1
 print(no_medaille, medaille, compt)
 
@@ -59,12 +64,14 @@ for i in range(nb_rows):
     medaille = tableau[i][14]  # La médaille est dans la colonne 15
 
     # Vérifier si le pays a une médaille
-    if medaille is not None and any(medal in medaille for medal in ["Gold", "Silver", "Bronze"]):
+    if medaille is not None and any(
+        medal in medaille for medal in ["Gold", "Silver", "Bronze"]
+    ):
         # Si le pays est déjà dans le dictionnaire, ajouter 1 médaille
         if pays in medailles_par_pays:
             medailles_par_pays[pays] += 1
         else:
-            # Si le pays n'est pas encore dans le dictionnaire, l'ajouter avec 1 médaille
+            # Si le pays n'est pas dans le dictionnaire, l'ajouter avec 1 médaille
             medailles_par_pays[pays] = 1
 
 # Trier le dictionnaire par le nombre de médailles en ordre décroissant
