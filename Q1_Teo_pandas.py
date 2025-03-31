@@ -27,93 +27,46 @@ def trouver_athletes_ete_hiver(df):
             len(saison) > 1
             and len(set(sports.get("Winter", [])) & set(sports.get("Summer", []))) == 0
         ):
+            # Créer un dictionnaire pour stocker les médailles et années par saison
+            medaille_annee = {}
+            annees_saison = {}
+
+            for saison in saison:
+                donnees_saison = group[group["Season"] == saison]
+                medaille_annee[saison] = donnees_saison["Medal"].tolist()
+                annees_saison[saison] = donnees_saison["Year"].tolist()
+
+            # Trouver les années communes
+            deux_saisons = set(annees_saison.get("Summer", [])) & set(
+                annees_saison.get("Winter", [])
+            )
+
             athletes_ete_hiver.append(
                 {
                     "ID": id,
                     "Name": group["Name"].iloc[0],
                     "Seasons": list(saison),
-                    "Medals": group["Medal"].tolist(),
-                    # converts a NumPy array to a Python list without changing its data
-                    "Years": group["Year"].tolist(),
+                    "medaille_annee": medaille_annee,
+                    "annees_saison": annees_saison,
+                    "deux_saisons": list(deux_saisons),
                 }
             )
-
     return athletes_ete_hiver
 
 
-# Trouver les 5 athlètes avec des médailles dans différentes saisons
+# Trouver les athlètes avec des médailles dans différentes saisons
 athletes_ete_hiver = trouver_athletes_ete_hiver(donnees)
 
 # Afficher les résultats
 print("Athlètes ayant remporté des médailles dans différentes saisons :")
 for athlete in athletes_ete_hiver:
-    print(f"\nid: {athlete['ID']}")
+    # Préparer la liste des années par saison
+    years_list = [
+        athlete['annees_saison'].get(saison, []) for saison in ['Summer', 'Winter']
+        ]
+
+    print(f"ID: {athlete['ID']}")
     print(f"Nom: {athlete['Name']}")
-    print(f"Saisons: {athlete['Seasons']}")
-    print(f"Médailles: {athlete['Medals']}")
-    print(f"Années: {athlete['Years']}")
-
-# Afficher les 5 premiers résultats
-print(athletes_ete_hiver)
-
-
-# Vérifier s'il y a des athlètes avec des médailles la même année
-def trouver_athletes_meme_annee(df):
-    # Identifier les athlètes ayant des médailles aux Jeux d'été et d'hiver
-    athletes_par_id = df.groupby("ID")
-    athletes_medaille_ete_hiver_meme_annee = []
-
-    for id, group in athletes_par_id:
-        # Filtrer les médailles uniquement
-        group_medailles = group[group["Medal"] != "NA"]
-
-        # Grouper par année
-        annees_par_saison = group_medailles.groupby("Year")["Season"].unique()
-
-        # Rechercher les années avec des médailles d'été et d'hiver
-        for annee, saisons in annees_par_saison.items():
-            if set(saisons) == {"Summer", "Winter"}:
-                # Récupérer les détails des médailles pour cette année
-                medailles_annee = group_medailles[group_medailles["Year"] == annee]
-
-                athletes_medaille_ete_hiver_meme_annee.append(
-                    {
-                        "ID": id,
-                        "Name": group["Name"].iloc[0],
-                        "Year": annee,
-                        "Summer_Medals": medailles_annee[
-                            medailles_annee["Season"] == "Summer"
-                        ]["Medal"].tolist(),
-                        "Winter_Medals": medailles_annee[
-                            medailles_annee["Season"] == "Winter"
-                        ]["Medal"].tolist(),
-                        "Summer_Sport": medailles_annee[
-                            medailles_annee["Season"] == "Summer"
-                        ]["Sport"]
-                        .unique()
-                        .tolist(),
-                        "Winter_Sport": medailles_annee[
-                            medailles_annee["Season"] == "Winter"
-                        ]["Sport"]
-                        .unique()
-                        .tolist(),
-                    }
-                )
-
-    return athletes_medaille_ete_hiver_meme_annee
-
-
-# Utilisation de la fonction
-athletes_meme_annee_ete_hiver = trouver_athletes_meme_annee(donnees)
-
-# Afficher les résultats
-print(
-    "\nAthlètes ayant remporté des médailles aux Jeux d'été et d'hiver la même année :"
-)
-for athlete in athletes_meme_annee_ete_hiver:
-    print(f"\nNom: {athlete['Name']}")
-    print(f"Année: {athlete['Year']}")
-    print(f"Sports d'été: {athlete['Summer_Sport']}")
-    print(f"Médailles d'été: {athlete['Summer_Medals']}")
-    print(f"Sports d'hiver: {athlete['Winter_Sport']}")
-    print(f"Médailles d'hiver: {athlete['Winter_Medals']}")
+    print(f"Années: {years_list}")
+    print(f"Années communes: {sorted(athlete['deux_saisons'])}")
+    print()
