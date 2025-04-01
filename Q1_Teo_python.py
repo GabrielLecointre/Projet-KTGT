@@ -9,12 +9,11 @@ with open(os.path.join("athlete_events.csv")) as donnees:
     for line in file:
         tableau.append(line)
 
-print(len(tableau), len(tableau[0]))
-
-# Afficher les 5 premières lignes du tableau (dont la première contient les noms des
-# colonnes)
-for ligne in tableau[:5]:
-    print(ligne)
+print(len(tableau))
+print(tableau[0])
+noms_colonnes = tableau[0]  # La première ligne contient les noms des colonnes
+for indice, nom_colonne in enumerate(noms_colonnes):
+    print(f"Indice {indice}: {nom_colonne}")
 
 # Only five athletes have won medals in both the Winter and the Summer Olympics.
 # Only one of them, Christa Ludinger-Rothenburger, won medals in the same year.
