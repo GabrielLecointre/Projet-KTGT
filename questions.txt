@@ -6,7 +6,7 @@ Teodora: Only five athletes have won medals in both the Winter and the Summer Ol
 Teodora: Jeux de Los Angeles 1984 : Quelle a été la performance détaillée de la Roumanie lors des JO de 1984, où elle a terminé deuxième au classement des médailles avec 20 médailles d'or, 16 d'argent et 17 de bronze ?
 Teodora: Exploit de Nadia Comăneci : Quels ont été les résultats spécifiques de Nadia Comăneci lors des JO de 1976, quelles épreuves ?
 
-Gabriel : comment la taille et le poids des athlètes varient-ils selon les sports ?
+Gabriel : comment la taille et le poids des athlètes varient-ils selon les sports et le sexe ?
 Gabriel : quels sont les sports qui ont vu le plus de participants au fil des années ?
 Gabriel : quels sont les 10 pays ayant remporté au moins une médaille dans le maximum d'éditions différentes des Jeux Olympiques ? pour le premier pays dans ce classement, cela correspond-il à au moins une médaille à chaque Jeux Olympiques ? 
 
