@@ -83,3 +83,5 @@ for athlete in athletes_ete_hiver:
         print(f"Années: {years_list}")
         print(f"Années communes: {sorted(athlete['deux_saisons'])}")
         print()
+
+# test
