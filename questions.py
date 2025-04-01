@@ -8,7 +8,7 @@ print(texte.split(","))  # ["Alice", "23", "17.5"]
 
 # Lire le fichier CSV manuellement et stocker les lignes dans une liste
 with open(
-    "donnees_jeux_olympiques/athlete_events.csv", "r", encoding="utf-8"
+    "athlete_events.csv", "r", encoding="utf-8"
 ) as donnees:
     lignes = donnees.readlines()  # Lire toutes les lignes
 
