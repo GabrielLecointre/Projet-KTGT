@@ -7,8 +7,7 @@ import pandas as pd
 donnees = pd.read_csv("athlete_events.csv")
 
 # Filtrer les données pour garder uniquement les athletes avec médailles
-donnees = donnees.dropna(subset=["Medal"])  # supprimer les valeurs manquantes
-donnees = donnees[donnees["Medal"] != "NA"]  # Exclure les entrées "NA"
+donnees = donnees[donnees["Medal"].notnull()]  # filtrer les données sauf NaN
 
 
 # Trouver les athlètes ayant participé aux Jeux d'été et d'hiver
@@ -62,8 +61,8 @@ print("Athlètes ayant remporté des médailles dans différentes saisons :")
 for athlete in athletes_ete_hiver:
     # Préparer la liste des années par saison
     years_list = [
-        athlete['annees_saison'].get(saison, []) for saison in ['Summer', 'Winter']
-        ]
+        athlete["annees_saison"].get(saison, []) for saison in ["Summer", "Winter"]
+    ]
 
     print(f"ID: {athlete['ID']}")
     print(f"Nom: {athlete['Name']}")
@@ -75,13 +74,11 @@ print("Athlètes ayant remporté des médailles dans différentes saisons la mê
 for athlete in athletes_ete_hiver:
     # Préparer la liste des années par saison
     years_list = [
-        athlete['annees_saison'].get(saison, []) for saison in ['Summer', 'Winter']
-        ]
-    if athlete['deux_saisons']:
+        athlete["annees_saison"].get(saison, []) for saison in ["Summer", "Winter"]
+    ]
+    if athlete["deux_saisons"]:
         print(f"ID: {athlete['ID']}")
         print(f"Nom: {athlete['Name']}")
         print(f"Années: {years_list}")
         print(f"Années communes: {sorted(athlete['deux_saisons'])}")
         print()
-
-# test
