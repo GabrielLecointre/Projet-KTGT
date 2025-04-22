@@ -6,6 +6,7 @@ Teodora: Only five athletes have won medals in both the Winter and the Summer Ol
 Teodora: Jeux de Los Angeles 1984 : Quelle a été la performance détaillée de la Roumanie lors des JO de 1984, où elle a terminé deuxième au classement des médailles avec 20 médailles d'or, 16 d'argent et 17 de bronze ?
 Teodora: Exploit de Nadia Comăneci : Quels ont été les résultats spécifiques de Nadia Comăneci lors des JO de 1976, quelles épreuves ?
 
+<<<<<<< HEAD
 Gabriel : comment la taille et le poids des athlètes varient-ils selon les sports et le sexe ?
 Gabriel : quels sont les sports qui ont vu le plus de participants au fil des années ?
 Gabriel : quels sont les 10 pays ayant remporté au moins une médaille dans le maximum d'éditions différentes des Jeux Olympiques ? pour le premier pays dans ce classement, cela correspond-il à au moins une médaille à chaque Jeux Olympiques ?
@@ -14,6 +15,15 @@ Tual : quel sportif a participé au plus d'épreuves sans jamais être médaill�
 Joseph "Josy" Stoffel, gymnaste du Luxembourg (JO 1948-1964), 38 participations et zéro médaille
 Tual : quelle édition a accueilli le plus de sportifs ne concourant pas sous le drapeau
 d'un pays ?
+=======
+Gabriel : comment la taille et le poids des athlètes varient-ils selon les sports et le sexe ? Classer par ordre croissant. (traitée en pandas)
+Gabriel : quel est le nombre de participants par sport et par édition ? Classer par ordre croissant. (traitée en pandas + affichage de graphiques)
+Gabriel : quels sont les 10 pays ayant remporté au moins une médaille dans le maximum d'éditions différentes des Jeux Olympiques ? pour le premier pays dans ce classement, cela correspond-il à au moins une médaille à chaque Jeux Olympiques ? 
+
+Tual : quel sportif a participé au plus d'épreuves sans jamais être médaillé ?
+Joseph "Josy" Stoffel, gymnaste du Luxembourg (JO 1948-1964), 38 participations et zéro médaille
+Tual : quelle édition a accueilli le plus de sportifs ne concourant pas sous le drapeau d'un pays ?
+>>>>>>> 67bd888d6c57baef1aef34f1409483eb324c7fa1
 Tual : combien de sportifs ont changé de délégation, dans quels sports ?
 
 Quelle nation a remporté le plus de médailles aux Jeux Olympiques de 2016 ?
