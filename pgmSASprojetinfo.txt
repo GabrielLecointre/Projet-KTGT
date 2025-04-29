@@ -1,0 +1,52 @@
+/* Séparer les données en fonction de la médaille */
+data donnees_medaille donnees_autre;
+    set donnees;
+    if Medal in ("Gold", "Silver", "Bronze") then output donnees_medaille;
+    else output donnees_autre;
+run;
+
+/* Fusionner les deux datasets en ne gardant que les observations qui sont uniquement dans 'donnees_autre' */
+data donnees_resultat;
+    merge donnees_medaille (in=A) donnees_autre (in=B);
+    by ID;
+    if B and not A;  /* Garder uniquement les observations de 'donnees_autre' */
+run;
+
+data donnees2;
+	set donnees(keep = ID, Name);
+run;
+
+
+import pandas as pd
+
+# Supposons que vous avez déjà un DataFrame nommé donnees
+# Par exemple, vous pouvez lire les données depuis un fichier CSV ou une autre source
+# donnees = pd.read_csv("chemin/vers/fichier.csv")
+
+# Séparer les données en fonction de la médaille
+donnees_medaille = donnees[donnees['Medal'].isin(['Gold', 'Silver', 'Bronze'])]
+donnees_autre = donnees[~donnees['Medal'].isin(['Gold', 'Silver', 'Bronze'])]
+
+# Fusionner les deux DataFrames en ne gardant que les lignes de donnees_autre
+donnees_resultat = pd.merge(donnees_medaille, donnees_autre, how='right', on='ID', indicator=True)
+
+# Garder uniquement les lignes qui sont présentes dans donnees_autre mais pas dans donnees_medaille
+donnees_resultat = donnees_resultat[donnees_resultat['_merge'] == 'right_only']
+
+# Supprimer la colonne '_merge' utilisée pour l'indicateur de fusion
+donnees_resultat = donnees_resultat.drop(columns=['_merge'])
+
+# Afficher le DataFrame résultant
+print(donnees_resultat)
+
+# Compter les occurrences de chaque ID
+occurrences = donnees_resultat['ID'].value_counts()
+
+# Extraire les 10 ID les plus fréquents
+top_10_ids = occurrences.head(10).index
+
+# Filtrer les lignes du DataFrame pour ne garder que celles qui ont les 10 ID les plus fréquents
+donnees_top_10 = donnees_resultat[donnees_resultat['ID'].isin(top_10_ids)]
+
+# Exporter le résultat dans un fichier CSV
+donnees_top_10.to_csv('top_10_ids.csv', index=False)
