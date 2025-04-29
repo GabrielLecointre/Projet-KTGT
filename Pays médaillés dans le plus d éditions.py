@@ -93,8 +93,8 @@ paysmedailles[["Nb_JO", "Nb_JO_H", "Nb_JO_E"]] = paysmedailles[
 ].astype(int)
 
 # On regroupe les pays suivants (ou leur prolongement historique) qui ont eu
-# des médailles sous des # codes différents selon les périodes, le nom de pays
-# renvoyé par le tableau est # identique et les données peuvent être sommées :
+# des médailles sous des codes différents selon les périodes, le nom de pays
+# renvoyé par le tableau est identique et les données peuvent être sommées :
 # ANZ = Australasie (soit Australie + Nouvelle-Zélande) affecté à Australia
 # BOH et TCH = Bohême et Tchécoslovaquie (soit République tchèque et Slovaquie)
 # affecté à Czech Republic (entité principale démographique)
