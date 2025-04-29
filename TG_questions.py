@@ -1,4 +1,4 @@
-# question : combien de sportifs ont changé de délégation ?
+# question : combien de sportifs ont changé de délégation ? dans quels sports ?
 
 import pandas as pd
 
@@ -22,6 +22,7 @@ print(filtered_donnees)
 filtered_donnees.to_csv('filtered_donnees.csv', sep=';', encoding='utf-8', index=False)
 
 print(f"Nb de sportifs ayant représenté plusieurs pays : {len(id_with_multiple_noc)}")
+# résultat attendu : Nb de sportifs ayant représenté plusieurs pays : 1537
 
 # question : combien de sports sont concernés ?
 
@@ -35,10 +36,10 @@ print(sports_count)
 sports_count.to_csv('sports_count.csv', sep=';', encoding='utf-8', index=True)
 
 print(f"\nNombre total de modalités de sports concernées : {len(sports_count)}")
+# résultat attendu : Nombre total de modalités de sports concernées : 47
 
 # question : quel sport compte le plus de sportifs concernés ?
-
 sport_max = sports_count.idxmax()
 valeur_max = sports_count.max()
 print(f"Sport le plus fréquent: {sport_max} ({valeur_max} occurrences)")
-
+# résultat attendu : Sport le plus fréquent: Athletics (862 occurrences)
