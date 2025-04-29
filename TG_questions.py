@@ -1,93 +1,44 @@
+# question : combien de sportifs ont changé de délégation ?
+
 import pandas as pd
 
 # Lire le fichier CSV
-donnees = pd.read_csv("athlete_events.csv", usecols=['ID', 'Name', 'Medal'])
+donnees = pd.read_csv("athlete_events.csv")
 
+# Exclure les entrées "IOA", athlètes neutres
+donnees1 = donnees[donnees["NOC"] != "IOA"]
 
-# question : quel sportif a participé au plus d'épreuves sans jamais être médaillé ?
+# Compter le nombre de modalités distinctes de NOC pour chaque valeur de ID
+multi_noc = donnees1.groupby('ID')['NOC'].nunique()
 
+# Garder les valeurs de ID où NOC a plus d'une modalité
+id_with_multiple_noc = multi_noc[multi_noc > 1].index
 
-# Séparer les données en fonction de la médaille
-donnees_medaille = donnees[donnees['Medal'].isin(['Gold', 'Silver', 'Bronze'])]
-donnees_autre = donnees[~donnees['Medal'].isin(['Gold', 'Silver', 'Bronze'])]
+# Filtrer le DataFrame original
+filtered_donnees = donnees1[donnees1['ID'].isin(id_with_multiple_noc)]
 
-# conserver uniquement les athletes qui n'ont jamais eu de médaille
-donnees_sans_only = pd.merge(
-    donnees_autre, donnees_medaille, how='outer', on='ID', indicator=True).query(
-        '_merge=="left_only"').drop(columns='_merge')
+print(filtered_donnees)
 
+filtered_donnees.to_csv('filtered_donnees.csv', sep=';', encoding='utf-8', index=False)
 
-# trier les ID par nombre de participations
+print(f"Nb de sportifs ayant représenté plusieurs pays : {len(id_with_multiple_noc)}")
 
-# Compter les occurrences des modalités de la variable 'ID'
-# modalites_count = donnees2['Name'].value_counts()
+# question : combien de sports sont concernés ?
 
-# Obtenir la modalité la plus fréquente et son nombre d'apparitions
-# top_modalite = modalites_count.idxmax('Name')  # La modalité la plus fréquente
-# top_modalite_count = modalites_count.max('Name')  # Le nombre d'apparitions de la
-# modalité
+# Pour ces IDs, lister et compter les sports concernés
+sports_for_these_ids = donnees1[donnees1['ID'].isin(id_with_multiple_noc)]['Sport']
+sports_count = sports_for_these_ids.value_counts()
 
-# Créer un DataFrame avec ces informations
-# top_modalite_df = pd.DataFrame({
-#    'Modalite': [top_modalite],
-#    'Count': [top_modalite_count]
-# })
+print("\nSports pratiqués par les IDs présents dans plusieurs pays :")
+print(sports_count)
 
-# Exporter le résultat dans un fichier CSV
-# top_modalite_df.to_csv('modalite_plus_frequente.csv', sep=';', encoding='utf-8',
-#                        index=False)
+sports_count.to_csv('sports_count.csv', sep=';', encoding='utf-8', index=True)
 
-# Compter les occurrences des modalités de la variable 'ID' avec groupby() et size()
-modalites_count = donnees_sans_only.groupby('Name').size()
+print(f"\nNombre total de modalités de sports concernées : {len(sports_count)}")
 
-# Obtenir la modalité la plus fréquente et son nombre d'apparitions
-top_modalite = modalites_count.idxmax()  # La modalité la plus fréquente
-top_modalite_count = modalites_count.max()  # Le nombre d'apparitions de la modalité
+# question : quel sport compte le plus de sportifs concernés ?
 
-# Créer un DataFrame avec ces informations
-modalite_plus_frequente = pd.DataFrame({
-    'Modalite': [top_modalite],
-    'Count': [top_modalite_count]
-})
+sport_max = sports_count.idxmax()
+valeur_max = sports_count.max()
+print(f"Sport le plus fréquent: {sport_max} ({valeur_max} occurrences)")
 
-# Exporter le résultat dans un fichier CSV
-modalite_plus_frequente.to_csv('modalite_plus_frequente.csv', index=False)
-
-compte = donnees_sans_only['ID'].value_counts(dropna=False).reset_index()
-print(compte)
-compte.to_csv('compte.csv', sep=';', encoding='utf-8', index=False)
-donnees_sans_only.to_csv('donnees2.csv', sep=';', encoding='utf-8', index=False)
-
-
-#################################################################################
-
-
-# conserver uniquement les athletes qui n'ont jamais eu de médaille
-donnees5 = pd.merge(
-    donnees_autre, donnees_medaille, how='outer', on='ID', indicator=True).query(
-        '_merge=="left_only"').drop(columns='_merge')
-
-
-# Compter les occurrences de chaque ID
-occurrences = donnees5['ID'].value_counts(dropna=False)
-
-
-# Extraire les 10 ID les plus fréquents
-top_10_id = occurrences.head(10).index
-
-
-# Filtrer les lignes du DataFrame pour ne garder que celles qui ont les 10 ID
-# les plus fréquents
-donnees_top_10 = donnees5[donnees5['ID'].isin(top_10_id)]
-
-# Exporter le résultat dans un fichier CSV
-donnees_top_10.to_csv('top_10_id.csv', sep=';', encoding='utf-8', index=False)
-
-
-# trier les ID par nombre de participations
-
-
-compte = donnees_sans_only['ID'].value_counts(dropna=False).reset_index()
-print(compte)
-compte.to_csv('compte.csv', sep=';', encoding='utf-8', index=False)
-donnees_sans_only.to_csv('donnees2.csv', sep=';', encoding='utf-8', index=False)
