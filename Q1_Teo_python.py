@@ -123,3 +123,35 @@ for athlete in athletes_ete_hiver:
         print(f"Années: {years_list}")
         print(f"Années communes: {sorted(athlete['deux_saisons'])}")
         print()
+
+# Export simple sans Pandas
+nom_fichier_export = "athletes_multi_saisons.csv"
+with open(nom_fichier_export, "w", newline="") as fichier_csv:
+    writer = csv.writer(fichier_csv)
+    # Écrire l'en-tête
+    writer.writerow(
+        [
+            "ID",
+            "Nom",
+            "Saisons",
+            "Médailles Été",
+            "Médailles Hiver",
+            "Années Été",
+            "Années Hiver",
+            "Années Communes",
+        ]
+    )
+    # Écrire les données des athlètes
+    for athlete in athletes_ete_hiver:
+        writer.writerow(
+            [
+                athlete["ID"],
+                athlete["Name"],
+                ", ".join(athlete["Seasons"]),
+                ", ".join(athlete["medaille_annee"].get("Summer", [])),
+                ", ".join(athlete["medaille_annee"].get("Winter", [])),
+                ", ".join(map(str, athlete["annees_saison"].get("Summer", []))),
+                ", ".join(map(str, athlete["annees_saison"].get("Winter", []))),
+                ", ".join(map(str, athlete["deux_saisons"])),
+            ]
+        )
