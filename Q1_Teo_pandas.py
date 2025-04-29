@@ -1,6 +1,5 @@
 # Only five athletes have won medals in both the Winter and the Summer Olympics.
 # Only one of them, Christa Ludinger-Rothenburger, won medals in the same year.
-
 import pandas as pd
 
 # Lire le fichier CSV
@@ -15,7 +14,7 @@ def trouver_athletes_ete_hiver(base, fichier_excel=None):
     athletes_par_id = base.groupby("ID")
 
     athletes_ete_hiver = []
-    data_pour_excel = []  # Liste pour stocker les données à exporter
+    data_pour_excel = []
 
     for id, group in athletes_par_id:
         saison = group["Season"].unique()  # garder les éléments uniques d'un tableau
@@ -31,10 +30,10 @@ def trouver_athletes_ete_hiver(base, fichier_excel=None):
             medaille_annee = {}
             annees_saison = {}
 
-            for saison in saison:
-                donnees_saison = group[group["Season"] == saison]
-                medaille_annee[saison] = donnees_saison["Medal"].tolist()
-                annees_saison[saison] = donnees_saison["Year"].tolist()
+            for s in saison:
+                donnees_saison = group[group["Season"] == s]
+                medaille_annee[s] = donnees_saison["Medal"].tolist()
+                annees_saison[s] = donnees_saison["Year"].tolist()
 
             # Trouver les années communes
             deux_saisons = set(annees_saison.get("Summer", [])) & set(
@@ -44,23 +43,17 @@ def trouver_athletes_ete_hiver(base, fichier_excel=None):
             athlete_info = {
                 "ID": id,
                 "Name": group["Name"].iloc[0],
-                "Seasons": ", ".join(saison),
-                "Médailles Été": ", ".join(medaille_annee.get("Summer", [])),
-                "Médailles Hiver": ", ".join(medaille_annee.get("Winter", [])),
-                "Années Été": ", ".join(map(str, annees_saison.get("Summer", []))),
-                "Années Hiver": ", ".join(map(str, annees_saison.get("Winter", []))),
-                "Années Communes": ", ".join(map(str, sorted(list(deux_saisons)))),
+                "Seasons": list(saison),
+                "medaille_annee": medaille_annee,
+                "annees_saison": annees_saison,
+                "deux_saisons": list(deux_saisons),
             }
             athletes_ete_hiver.append(athlete_info)
             data_pour_excel.append(athlete_info)
 
     if fichier_excel:
         df_export = pd.DataFrame(data_pour_excel)
-        try:
-            df_export.to_excel(fichier_excel, index=False)
-            print(f"Les données des athlètes ont été exportées vers '{fichier_excel}'")
-        except Exception as e:
-            print(f"Erreur lors de l'exportation vers Excel: {e}")
+        df_export.to_excel(fichier_excel, index=False)
 
     return athletes_ete_hiver
 
