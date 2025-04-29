@@ -11,10 +11,11 @@ donnees = donnees[donnees["Medal"].notnull()]  # filtrer les données sauf NaN
 
 
 # Trouver les athlètes ayant participé aux Jeux d'été et d'hiver
-def trouver_athletes_ete_hiver(base):
+def trouver_athletes_ete_hiver(base, fichier_excel=None):
     athletes_par_id = base.groupby("ID")
 
     athletes_ete_hiver = []
+    data_pour_excel = []  # Liste pour stocker les données à exporter
 
     for id, group in athletes_par_id:
         saison = group["Season"].unique()  # garder les éléments uniques d'un tableau
@@ -40,21 +41,34 @@ def trouver_athletes_ete_hiver(base):
                 annees_saison.get("Winter", [])
             )
 
-            athletes_ete_hiver.append(
-                {
-                    "ID": id,
-                    "Name": group["Name"].iloc[0],
-                    "Seasons": list(saison),
-                    "medaille_annee": medaille_annee,
-                    "annees_saison": annees_saison,
-                    "deux_saisons": list(deux_saisons),
-                }
-            )
+            athlete_info = {
+                "ID": id,
+                "Name": group["Name"].iloc[0],
+                "Seasons": ", ".join(saison),
+                "Médailles Été": ", ".join(medaille_annee.get("Summer", [])),
+                "Médailles Hiver": ", ".join(medaille_annee.get("Winter", [])),
+                "Années Été": ", ".join(map(str, annees_saison.get("Summer", []))),
+                "Années Hiver": ", ".join(map(str, annees_saison.get("Winter", []))),
+                "Années Communes": ", ".join(map(str, sorted(list(deux_saisons)))),
+            }
+            athletes_ete_hiver.append(athlete_info)
+            data_pour_excel.append(athlete_info)
+
+    if fichier_excel:
+        df_export = pd.DataFrame(data_pour_excel)
+        try:
+            df_export.to_excel(fichier_excel, index=False)
+            print(f"Les données des athlètes ont été exportées vers '{fichier_excel}'")
+        except Exception as e:
+            print(f"Erreur lors de l'exportation vers Excel: {e}")
+
     return athletes_ete_hiver
 
 
 # Trouver les athlètes avec des médailles dans différentes saisons
-athletes_ete_hiver = trouver_athletes_ete_hiver(donnees)
+athletes_ete_hiver = trouver_athletes_ete_hiver(
+    donnees, fichier_excel="athletes_multi_saisons.xlsx"
+)
 
 # Afficher les résultats
 print("Athlètes ayant remporté des médailles dans différentes saisons :")

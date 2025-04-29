@@ -94,7 +94,7 @@ def classement_jo(donnees, annee, nb_pays=15, fichier_excel=None):
     return top_classement
 
 
-# exportation Excel
+# Utilisation : classement + exportation Excel
 classement_1984 = classement_jo(
     donnees_jo, 1984, fichier_excel="classement_jo_1984.xlsx"
 )
