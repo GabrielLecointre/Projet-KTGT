@@ -42,6 +42,7 @@ with open('filtered_donnees.csv', 'w', encoding='utf-8', newline='') as file:
 
 # Afficher le nombre de sportifs concernés
 print(f"Nb de sportifs ayant représenté plusieurs pays : {len(id_with_multiple_noc)}")
+# résultat attendu : Nb de sportifs ayant représenté plusieurs pays : 1537
 
 # question : combien de sports sont concernés ?
 
@@ -63,7 +64,9 @@ with open('sports_count.csv', 'w', encoding='utf-8', newline='') as file:
 
 # Afficher le nombre total de sports concernés
 print(f"\nNombre total de modalités de sports concernées : {len(sports_count)}")
+# résultat attendu : Nombre total de modalités de sports concernées : 47
 
 # question : quel sport compte le plus de sportifs concernés ?
 sport_max = max(sports_count.items(), key=lambda x: x[1])
 print(f"Sport le plus fréquent: {sport_max[0]} ({sport_max[1]} occurrences)")
+# résultat attendu : Sport le plus fréquent: Athletics (862 occurrences)
