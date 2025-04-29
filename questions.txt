@@ -6,14 +6,11 @@ Teodora: Only five athletes have won medals in both the Winter and the Summer Ol
 Teodora: Jeux de Los Angeles 1984 : Quelle a été la performance détaillée de la Roumanie lors des JO de 1984, où elle a terminé deuxième au classement des médailles avec 20 médailles d'or, 16 d'argent et 17 de bronze ?
 Teodora: Exploit de Nadia Comăneci : Quels ont été les résultats spécifiques de Nadia Comăneci lors des JO de 1976, quelles épreuves ?
 
-<<<<<<< HEAD
-Gabriel : comment la taille et le poids des athlètes varient-ils selon les sports et le sexe ?
-Gabriel : quels sont les sports qui ont vu le plus de participants au fil des années ?
-Gabriel : quels sont les 10 pays ayant remporté au moins une médaille dans le maximum d'éditions différentes des Jeux Olympiques ? pour le premier pays dans ce classement, cela correspond-il à au moins une médaille à chaque Jeux Olympiques ?
-=======
 Gabriel : comment la taille et le poids des athlètes varient-ils selon les sports et le sexe ? Classer par ordre croissant. (traitée en pandas)
-Gabriel : quel est le nombre de participants par sport et par édition ? Classer par ordre croissant. (traitée en pandas + affichage de graphiques)
-Gabriel : quels sont les 10 pays ayant remporté au moins une médaille dans le maximum d'éditions différentes des Jeux Olympiques ? pour le premier pays dans ce classement, cela correspond-il à au moins une médaille à chaque Jeux Olympiques ? 
+Gabriel : quel est le nombre de participants par sport et par édition ? Classer par ordre croissant.
+(traitée en pandas + affichage de graphiques pour les 24 sports ayant accueilli le plus de sportifs)
+Gabriel : classer les délégations par ordre décroissant du nombre d'éditions des Jeux Olympiques où au moins une médaille a été remportée.
+Comparer au nombre d'éditions des Jeux olympiques de chaque type. (traitée en pandas)
 
 >>>>>>> 67bd888d6c57baef1aef34f1409483eb324c7fa1
 Tual : combien de sportifs ont changé de délégation (hors délégation neutre)?
