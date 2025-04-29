@@ -107,6 +107,26 @@ paysmedailles[["Nb_JO", "Nb_JO_H", "Nb_JO_E"]] = paysmedailles[
 paysmedailles = (
     paysmedailles.groupby("region")[["Nb_JO", "Nb_JO_E", "Nb_JO_H"]].sum().reset_index()
 )
+
+# On calcule du nombre total d’éditions par type de Jeux Olympiques.
+nb_total = BDJO["Games"].nunique()
+nb_ete = BDJO[BDJO["Season"] == "Summer"]["Games"].nunique()
+nb_hiver = BDJO[BDJO["Season"] == "Winter"]["Games"].nunique()
+
+# On crée une ligne "TOTAL" au format DataFrame.
+ligne_total = pandas.DataFrame(
+    {
+        "Nb_JO": [nb_total],
+        "Nb_JO_E": [nb_ete],
+        "Nb_JO_H": [nb_hiver],
+        "region": "TOTAL",
+    },
+    index=["TOTAL"],
+)
+
+# On ajoute cette ligne au tableau "paysmedailles".
+paysmedailles = pandas.concat([ligne_total, paysmedailles])
+
 # Je renomme la colonne "region" en "délégation".
 paysmedailles.rename(columns={"region": "délégation"}, inplace=True)
 # Je supprime la colonne d'index qui était indésirable
@@ -122,9 +142,10 @@ paysmedailles_tri = paysmedailles.sort_values(
 # Afficher le résultat
 print(paysmedailles_tri)
 
-'''Ce programme affiche :
+"""Ce programme affiche :
                              Nb_JO  Nb_JO_E  Nb_JO_H
 délégation
+TOTAL                           51       29       22
 France                          50       29       21
 USA                             50       28       22
 Canada                          49       27       22
@@ -263,4 +284,4 @@ Sudan                            1        1        0
 Tanzania                         1        1        0
 Togo                             1        1        0
 Tonga                            1        1        0
-Virgin Islands, US               1        1        0'''
+Virgin Islands, US               1        1        0"""
