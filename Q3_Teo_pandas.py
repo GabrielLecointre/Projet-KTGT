@@ -5,23 +5,37 @@ import pandas as pd
 # Lire le fichier CSV
 donnees = pd.read_csv("athlete_events.csv")
 
-# Filtrer les données pour Nadia Comăneci
-nadia = donnees[donnees["Name"] == "Nadia Elena Comneci (-Conner)"]
+# Demander à l'utilisateur d'indiquer l'année et le sportif
+nom_sportif = input("Entrez le nom du sportif pour afficher ses résultats : ").lower()
+annee = int(input("Entrez l'année des Jeux Olympiques : "))
 
-# Filtrer les données pour l'année 1976
-nadia_1976 = nadia[nadia["Year"] == 1976]
+# Filtrer sur le nom (recherche partielle, insensible à la casse)
+filtre_nom = donnees["Name"].str.lower().str.contains(nom_sportif)
+sportif = donnees[filtre_nom]
 
-# Préparer les données pour l'export Excel
-data_export = nadia_1976[["Year", "Name", "Event", "Medal"]]
-data_export.columns = ["Année", "Nom", "Épreuve", "Médaille"]  # Renommer les colonnes
+# Vérifier si des données existent
+if sportif.empty:
+    print("Aucun sportif trouvé avec ce nom.")
+else:
+    # Filtrer sur l'année
+    sportif_annee = sportif[sportif["Year"] == annee]
 
-# Exporter les résultats vers un fichier Excel
-nom_fichier_excel = "resultats_nadia_comaneci_1976.xlsx"
-data_export.to_excel(nom_fichier_excel, index=False)
+    if sportif_annee.empty:
+        print(f"Aucune participation trouvée en {annee} pour ce sportif.")
+    else:
+        # Préparer les données pour l'export Excel
+        data_export = sportif_annee[["Year", "Name", "Event", "Medal"]]
+        data_export.columns = ["Année", "Nom", "Épreuve", "Médaille"]
 
-# Afficher les résultats spécifiques de Nadia Comăneci en 1976
-print("Résultats de Nadia Comăneci aux Jeux Olympiques de 1976 :")
-for index, row in nadia_1976.iterrows():
-    print(f"Épreuve: {row['Event']}")
-    print(f"Médaille: {row['Medal']}")
-    print("-" * 30)
+        # Générer un nom de fichier propre
+        nom_fichier_excel = f"resultats_{nom_sportif.replace(' ', '_')}_{annee}.xlsx"
+
+        # Exporter vers Excel
+        data_export.to_excel(nom_fichier_excel, index=False)
+
+        # Afficher les résultats
+        print(f"Résultats pour {data_export['Nom'].iloc[0]} en {annee} :")
+        for index, row in data_export.iterrows():
+            print(f"Épreuve: {row['Épreuve']}")
+            print(f"Médaille: {row['Médaille']}")
+            print("-" * 30)

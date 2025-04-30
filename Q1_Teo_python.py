@@ -1,3 +1,7 @@
+# Only five athletes have won medals in both the Winter and the Summer Olympics.
+# Combien d'athlètes ont remporté des médailles aux Jeux olympiques d'hiver et d'été ?
+# Only one of them, Christa Ludinger-Rothenburger, won medals in the same year.
+# Combien en ont remporté la même année ?
 import os
 import csv
 
@@ -15,8 +19,6 @@ noms_colonnes = tableau[0]  # La première ligne contient les noms des colonnes
 for indice, nom_colonne in enumerate(noms_colonnes):
     print(f"Indice {indice}: {nom_colonne}")
 
-# Only five athletes have won medals in both the Winter and the Summer Olympics.
-# Only one of them, Christa Ludinger-Rothenburger, won medals in the same year.
 
 # Suppression des lignes où "Medal" est None (si jamais), et des cas ='NA'
 donnees_filtrees = [
@@ -42,7 +44,7 @@ def trouver_athletes_ete_hiver(base):
         # Extraire les saisons uniques pour cet athlète
         saisons = set()
         for p in participations:
-            saisons.add(p[10])
+            saisons.add(p[10])  # c'est la 11e colonne
         saisons = list(saisons)
 
         # Collecter les sports par saison
@@ -124,11 +126,11 @@ for athlete in athletes_ete_hiver:
         print(f"Années communes: {sorted(athlete['deux_saisons'])}")
         print()
 
-# Export simple sans Pandas
+# Export csv
 nom_fichier_export = "athletes_multi_saisons.csv"
 with open(nom_fichier_export, "w", newline="") as fichier_csv:
     writer = csv.writer(fichier_csv)
-    # Écrire l'en-tête
+    # Écrire l'en-tête des colonnes
     writer.writerow(
         [
             "ID",

@@ -70,7 +70,7 @@ def classement_jo(donnees, annee, nb_pays=15, fichier_excel=None):
         if medal not in medailles_par_pays.columns:
             medailles_par_pays[medal] = 0
 
-    # ordre d'affichage souhaité
+    # ordre d'affichage souhaité (pas alphabétique)
     medal_order = ["Gold", "Silver", "Bronze"]
 
     # imposer l'ordre souhaité
@@ -79,7 +79,7 @@ def classement_jo(donnees, annee, nb_pays=15, fichier_excel=None):
     # Calculer le total des médailles
     medailles_par_pays["Total"] = medailles_par_pays.sum(axis=1)
 
-    # Trier UNIQUEMENT par médailles d'or
+    # Trier par médailles d'or, puis argent, puis bronze
     classement = medailles_par_pays.sort_values(
         by=["Gold", "Silver", "Bronze"], ascending=False
     )
@@ -94,12 +94,15 @@ def classement_jo(donnees, annee, nb_pays=15, fichier_excel=None):
     return top_classement
 
 
-# Utilisation : classement + exportation Excel
+# Utilisation : classement + exportation Excel pour 1984
 classement_1984 = classement_jo(
     donnees_jo, 1984, fichier_excel="classement_jo_1984.xlsx"
 )
 
+# Utilisation avec choix de l'année sans export
+annee = int(input("Pour quelle année souhaitez-vous afficher les résultats ? "))
+nb_pays = int(input("Combien de pays souhaitez-vous afficher ? "))
 
-classement_1984 = classement_jo(donnees_jo, 1984)
-print("Classement des pays aux JO de 1984 :")
-print(f"{classement_1984}")
+classement = classement_jo(donnees_jo, annee, nb_pays=nb_pays)
+print(f"Classement des {nb_pays} premiers pays aux JO de {annee} :")
+print(f"{classement}")
