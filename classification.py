@@ -1,180 +1,152 @@
 import pandas as pd
+from sklearn.preprocessing import StandardScaler
+from sklearn.cluster import KMeans
+from sklearn.decomposition import PCA
+import seaborn as sns
+import matplotlib.pyplot as plt
 
-# Charger les données
-donnees = pd.read_csv("athlete_events.csv")
+# -----------------------------
+# Chargement des données
+# -----------------------------
+df = pd.read_csv("athlete_events.csv")
 
-# 1) Classification des épreuves sportives pour une année donnée
+# -----------------------------
+# Étapes auxiliaires
+# -----------------------------
 
 
-def classifier_epreuves(df, annee):
-    df_annee = df[df["Year"] == annee]
+def ajouter_type_epreuve(donnees):
+    corrected_rows = []
+    for event, group in donnees.groupby("Event"):
+        medal_counts = group["Medal"].value_counts()
+        total_medals = medal_counts.sum()
 
-    def get_type_epreuve(group):
-        if group["Event"].nunique() > 1:
-            return "Combinée"
-        medal_counts = group["Medal"].value_counts().sum()
-        if medal_counts >= 6:
-            return "Collective (estimation)"
+        if total_medals >= 6:
+            kept_medals = []
+            for medal in ["Gold", "Silver", "Bronze"]:
+                if medal in group["Medal"].values:
+                    first_occurrence = group[group["Medal"] == medal].iloc[[0]]
+                    kept_medals.append(first_occurrence)
+            if kept_medals:
+                corrected_rows.append(pd.concat(kept_medals))
         else:
-            return "Individuelle"
+            corrected_rows.append(group)
 
-    classification = (
-        df_annee.groupby("Event")
+    donnees_corr = pd.concat(corrected_rows, ignore_index=True)
+    donnees_corr["Type"] = "individuel"
+    epreuves_collectives = donnees_corr["Event"].value_counts()
+    epreuves_collectives = epreuves_collectives[epreuves_collectives >= 6].index
+    donnees_corr.loc[donnees_corr["Event"].isin(epreuves_collectives), "Type"] = (
+        "collectif"
+    )
+    return donnees_corr
+
+
+def construire_table_epreuves(donnees):
+    table = (
+        donnees.groupby("Event")
         .agg(
-            nombre_epreuves_dans_sport=("Sport", "nunique"),
-            part_femmes_participants=(
-                "Sex",
-                lambda x: (x == "F").sum() / len(x) if len(x) > 0 else 0,
-            ),
-            nombre_participants=("ID", "nunique"),
-            nombre_pays_participant=("NOC", "nunique"),
-            age_moyen_participants=("Age", "mean"),
-            ecart_type_age_athletes=("Age", "std"),
-            poids_moyen_athletes=("Weight", "mean"),
-            ecart_type_poids_athletes=("Weight", "std"),
-            taille_moyenne_athletes=("Height", "mean"),
-            ecart_type_taille_athletes=("Height", "std"),
-            annee_apparition_epreuve=("Year", "min"),
-            type_epreuve=("", get_type_epreuve),
+            **{
+                "Sport": ("Sport", "first"),
+                "Nb participants": ("ID", "nunique"),
+                "Nb pays": ("NOC", "nunique"),
+                "Part femmes": ("Sex", lambda x: (x == "F").sum() / len(x)),
+                "Âge moyen": ("Age", "mean"),
+                "Écart âge": ("Age", "std"),
+                "Poids moyen": ("Weight", "mean"),
+                "Écart poids": ("Weight", "std"),
+                "Taille moyenne": ("Height", "mean"),
+                "Écart taille": ("Height", "std"),
+                "Année apparition": ("Year", "min"),
+                "Type": ("Type", "first"),
+            }
         )
         .reset_index()
     )
-
-    return classification
-
-
-# Exemple de classification pour l'année 2016
-annee_cible_1 = 2016
-classification_2016 = classifier_epreuves(donnees, annee_cible_1)
-print(
-    f"\nClassification des épreuves sportives pour l'année {annee_cible_1}:"
-    f"\n{classification_2016}"
-)
-
-# 2) Comparaison de la classification sur 4 périodes couvrant 100 ans
-
-
-def comparer_classifications(df, periode_debut, taille_periode=25):
-    classifications_par_periode = {}
-    for i in range(4):
-        annee_debut = periode_debut + i * taille_periode
-        annee_fin = annee_debut + taille_periode - 1
-        annee_milieu = (
-            annee_debut + annee_fin
-        ) // 2  # Choisir une année représentative
-        df_periode = df[(df["Year"] >= annee_debut) & (df["Year"] <= annee_fin)]
-        if not df_periode.empty:
-            classification = classifier_epreuves(df_periode, annee_milieu)
-            classifications_par_periode[f"{annee_debut}-{annee_fin}"] = classification
-        else:
-            classifications_par_periode[f"{annee_debut}-{annee_fin}"] = pd.DataFrame()
-            print(f"Aucune donnée trouvée pour la période {annee_debut}-{annee_fin}.")
-    return classifications_par_periode
-
-
-# Comparaison sur 4 périodes de 25 ans commençant en 1920 (pour couvrir environ 100 ans)
-periode_debut_comparaison = 1920
-classifications_historiques = comparer_classifications(
-    donnees, periode_debut_comparaison
-)
-
-print("\nComparaison de la classification des épreuves sur différentes périodes:")
-for periode, classification in classifications_historiques.items():
-    print(f"\n--- Période: {periode} ---")
-    if not classification.empty:
-        print(
-            classification.head()
-        )  # Afficher les premières lignes pour chaque période
-    else:
-        print("Aucune donnée de classification pour cette période.")
-
-# Analyse de l'évolution (à compléter)
-print("\nAnalyse de l'évolution des groupes d'épreuves au cours du dernier siècle:")
-# Ici, vous pouvez comparer les classifications des différentes périodes pour identifier
-# des tendances dans les caractéristiques physiques des athlètes et la formation des
-# groupes d'épreuves.
-# Par exemple, vous pourriez comparer l'évolution de la taille moyenne des athlètes
-# dans certains sports ou la part des femmes participantes au fil du temps.
-
-
-# Adaptation de la fonction correct_medal_counts pour le type d'épreuve
-def determiner_type_epreuve_v2(df):
-    def get_type(group):
-        medal_counts = group["Medal"].value_counts().sum()
-        return "Collective" if medal_counts >= 6 else "Individuelle"
-
-    type_epreuve = (
-        df.groupby("Event").apply(get_type).reset_index(name="type_epreuve_v2")
+    table["Nb épreuves dans le sport"] = table.groupby("Sport")["Event"].transform(
+        "count"
     )
-    df_merged = pd.merge(df, type_epreuve, on="Event", how="left")
-    return df_merged
+    return table
 
 
-donnees_avec_type = determiner_type_epreuve_v2(donnees)
-print(
-    "\nDonnées avec le type d'épreuve déterminé :\n",
-    donnees_avec_type[["Event", "Medal", "type_epreuve_v2"]].head(),
+# -----------------------------
+# Traitement par période
+# -----------------------------
+colonnes_features = [
+    "Nb épreuves dans le sport",
+    "Nb participants",
+    "Nb pays",
+    "Part femmes",
+    "Âge moyen",
+    "Écart âge",
+    "Poids moyen",
+    "Écart poids",
+    "Taille moyenne",
+    "Écart taille",
+]
+
+periodes = {
+    "1916-1940": (1916, 1940),
+    "1941-1965": (1941, 1965),
+    "1966-1990": (1966, 1990),
+    "1991-2016": (1991, 2016),
+}
+
+tables_par_periode = []
+scaler = StandardScaler()
+
+for nom_periode, (debut, fin) in periodes.items():
+    print(f"→ Traitement de la période {nom_periode}")
+    subset = df[(df["Year"] >= debut) & (df["Year"] <= fin)].copy()
+    subset = ajouter_type_epreuve(subset)
+    table = construire_table_epreuves(subset)
+    table["Période"] = nom_periode
+
+    # Nettoyage
+    table = table.dropna(subset=colonnes_features)
+    X_scaled = scaler.fit_transform(table[colonnes_features])
+
+    # KMeans
+    kmeans = KMeans(n_clusters=4, random_state=0)
+    table["Cluster"] = kmeans.fit_predict(X_scaled)
+
+    tables_par_periode.append(table)
+
+# -----------------------------
+# PCA sur toutes les périodes
+# -----------------------------
+table_periodes = pd.concat(tables_par_periode, ignore_index=True)
+X_scaled_all = scaler.fit_transform(table_periodes[colonnes_features])
+pca = PCA(n_components=2)
+X_pca = pca.fit_transform(X_scaled_all)
+
+table_periodes["PCA1"] = X_pca[:, 0]
+table_periodes["PCA2"] = X_pca[:, 1]
+
+# -----------------------------
+# Visualisation PCA
+# -----------------------------
+sns.set(style="whitegrid")
+g = sns.relplot(
+    data=table_periodes,
+    x="PCA1",
+    y="PCA2",
+    hue="Cluster",
+    col="Période",
+    palette="tab10",
+    kind="scatter",
+    height=5,
+    aspect=1,
 )
-
-# Pour intégrer cette logique dans la classification initiale, vous pouvez modifier
-# la fonction classifier_epreuves.
-
-
-# Exemple d'intégration dans classifier_epreuves:
-def classifier_epreuves_integre(df, annee):
-    df_annee = df[df["Year"] == annee].copy()
-
-    def get_type_epreuve_integre(group):
-        if group["Event"].nunique() > 1:
-            return "Combinée"
-        medal_counts = group["Medal"].value_counts().sum()
-        if medal_counts >= 6:
-            return "Collective"
-        else:
-            return "Individuelle"
-
-    classification = (
-        df_annee.groupby("Event")
-        .agg(
-            nombre_epreuves_dans_sport=("Sport", "nunique"),
-            part_femmes_participants=(
-                "Sex",
-                lambda x: (x == "F").sum() / len(x) if len(x) > 0 else 0,
-            ),
-            nombre_participants=("ID", "nunique"),
-            nombre_pays_participant=("NOC", "nunique"),
-            age_moyen_participants=("Age", "mean"),
-            ecart_type_age_athletes=("Age", "std"),
-            poids_moyen_athletes=("Weight", "mean"),
-            ecart_type_poids_athletes=("Weight", "std"),
-            taille_moyenne_athletes=("Height", "mean"),
-            ecart_type_taille_athletes=("Height", "std"),
-            annee_apparition_epreuve=("Year", "min"),
-            type_epreuve=("", get_type_epreuve_integre),
-        )
-        .reset_index()
-    )
-
-    return classification
-
-
-annee_cible_integre = 2016
-classification_2016_integre = classifier_epreuves_integre(donnees, annee_cible_integre)
-print(
-    f"\nClassification des épreuves sportives pour l'année {annee_cible_integre}:"
-    f"\n{classification_2016_integre}"
+g.fig.suptitle(
+    "Classification des épreuves sportives par période (PCA + K-means)", y=1.05
 )
+plt.tight_layout()
+plt.savefig("pca_clusters_par_periode.png")
+plt.show()
 
-# Pour répondre à la problématique, vous devrez analyser les résultats de la
-# comparaison des classifications au fil du temps. Examinez comment les
-# caractéristiques physiques moyennes et la diversité des athlètes évoluent
-# pour différents types d'épreuves (individuelles, collectives, combinées)
-# au cours des différentes périodes.
-
-# Par exemple, vous pourriez visualiser l'évolution de la taille moyenne des
-# athlètes dans les épreuves collectives par rapport aux épreuves individuelles.
-# Vous pourriez également examiner comment la part des femmes participantes
-# a changé dans différents types d'épreuves.
-
-# N'hésitez pas à poser d'autres questions si vous avez besoin d'aide pour des
-# analyses ou visualisations spécifiques.
+# -----------------------------
+# Export Excel
+# -----------------------------
+table_periodes.to_excel("classification_epreuves_olympiques.xlsx", index=False)
+print("✅ Export Excel terminé : classification_epreuves_olympiques.xlsx")
