@@ -4,117 +4,102 @@
 import csv
 import os
 
-# --- Étape 1 : Chargement des fichiers CSV ---
-
-# Adapter le chemin si nécessaire
+# On charge les fichiers.
 chemin_base = "donnees_jeux_olympiques"
 BDJO = os.path.join(chemin_base, "athlete_events.csv")
 pays = os.path.join(chemin_base, "noc_regions.csv")
 
-# Chargement des NOC vers régions
-noc_to_region = {}
+# On regarde la concordance entre codes utilisés par le C.I.O. et noms des pays.
+concordance = {}
 with open(pays, encoding="utf-8") as f:
-    reader = csv.DictReader(f)
-    for row in reader:
+    for row in csv.DictReader(f):
         noc = row["NOC"]
         region = row["region"]
-        noc_to_region[noc] = region
+        concordance[noc] = region
 
-# Corrections manuelles
+# On fait des corrections manuelles sur 4 pays.
 corrections = {
     "SGP": "Singapore",
     "HKG": "Hong Kong",
     "WIF": "Jamaica",
     "GDR": "East Germany",
 }
-noc_to_region.update(corrections)
+concordance.update(corrections)
 
-# Dictionnaire pour stocker les éditions avec médailles par pays
-noc_games = {}  # clé : NOC, valeur : set de Games
-noc_ete = {}    # clé : NOC, valeur : set de Games d'été
-noc_hiver = {}  # clé : NOC, valeur : set de Games d'hiver
+# On crée un dictionnaire vide pour stocker les éditions avec médailles par pays.
+noc_tot = {}  # clé : NOC, valeur : set vide de Jeux été et hiver confondus
+noc_e = {}    # clé : NOC, valeur : set vide de Jeux d’été
+noc_h = {}    # clé : NOC, valeur : set vide de Jeux d’hiver
 
-# Pour connaître le nombre total d'éditions (été/hiver)
-total_games = set()
-ete_games = set()
-hiver_games = set()
+# Pour connaître le nombre total d’éditions (été/hiver).
+tot_JO = set()
+e_JO = set()
+h_JO = set()
 
 with open(BDJO, encoding="utf-8") as f:
-    reader = csv.DictReader(f)
-    for row in reader:
+    for row in csv.DictReader(f):
         if row["Medal"] not in {"Gold", "Silver", "Bronze"}:
             continue  # On ignore les lignes sans médaille
 
         noc = row["NOC"]
-        games = row["Games"]
-        season = row["Season"]
+        jeux = row["Games"]
+        saison = row["Season"]
 
-        total_games.add(games)
-        if season == "Summer":
-            ete_games.add(games)
-        else:
-            hiver_games.add(games)
+        tot_JO.add(jeux)
+        if saison == "Summer": # Jeux d’été
+            e_JO.add(jeux)
+        else: # Forcément "Winter" pour ceux d’hiver.
+            h_JO.add(jeux)
 
         # Initialisation des sets si nécessaires
-        if noc not in noc_games:
-            noc_games[noc] = set()
-            noc_ete[noc] = set()
-            noc_hiver[noc] = set()
+        if noc not in noc_tot:
+            noc_tot[noc] = set()
+            noc_e[noc] = set()
+            noc_h[noc] = set()
 
-        noc_games[noc].add(games)
-        if season == "Summer":
-            noc_ete[noc].add(games)
+        noc_tot[noc].add(jeux)
+        if saison == "Summer":
+            noc_e[noc].add(jeux)
         else:
-            noc_hiver[noc].add(games)
+            noc_h[noc].add(jeux)
 
-# --- Étape 2 : Regroupement des pays historiques ---
+# On fusionne les délégations qui ont eu une continuité historique :
+# Union soviétique -> équipe unifiée (1992) -> Russie
+# Bohême -> Tchécoslovaquie -> Tchéquie
+# Jamaïque -> Indes occidentales -> Jamaïque
+# Allemagne -> Allemagne de l’Ouest -> Allemagne
+# Yougoslavie -> Serbie-et-Monténégro -> Serbie
+table_pays = {}
+regroupements = {}
 
-# Dictionnaire final : région → sets d’éditions
-region_data = {}
-
-# Regroupements historiques
-regroupements = {
-    "ANZ": "Australia",
-    "BOH": "Czech Republic",
-    "TCH": "Czech Republic",
-    "YUG": "Serbia",
-    "SCG": "Serbia",
-    "URS": "Russia",
-    "EUN": "Russia",
-    "FRG": "Germany",
-    "WIF": "Jamaica",  # redondant avec correction plus haut
-}
-
-for noc in noc_games:
-    region = regroupements.get(noc, noc_to_region.get(noc, noc))  # fallback : NOC si pas trouvé
-
-    if region not in region_data:
-        region_data[region] = {
+for noc in noc_tot:
+    pays = regroupements.get(noc, concordance.get(noc, noc))
+    if pays not in table_pays:
+        table_pays[pays] = {
             "total": set(),
             "ete": set(),
             "hiver": set()
         }
 
-    region_data[region]["total"].update(noc_games[noc])
-    region_data[region]["ete"].update(noc_ete[noc])
-    region_data[region]["hiver"].update(noc_hiver[noc])
+    table_pays[pays]["total"].update(noc_tot[noc])
+    table_pays[pays]["ete"].update(noc_e[noc])
+    table_pays[pays]["hiver"].update(noc_h[noc])
 
-# --- Étape 3 : Création du tableau final ---
-
+# On crée le tableau final.
 # Calcul ligne "TOTAL"
 total_ligne = {
     "délégation": "TOTAL",
-    "Nb_JO": len(total_games),
-    "Nb_JO_E": len(ete_games),
-    "Nb_JO_H": len(hiver_games),
+    "Nb_JO": len(tot_JO),
+    "Nb_JO_E": len(e_JO),
+    "Nb_JO_H": len(h_JO),
 }
 
 # Liste des résultats par pays
 resultats = []
 
-for region, data in region_data.items():
+for pays, data in table_pays.items():
     resultats.append({
-        "délégation": region,
+        "délégation": pays,
         "Nb_JO": len(data["total"]),
         "Nb_JO_E": len(data["ete"]),
         "Nb_JO_H": len(data["hiver"]),
@@ -126,9 +111,8 @@ resultats.append(total_ligne)
 # Tri : d'abord par Nb_JO décroissant, puis par ordre alphabétique
 resultats.sort(key=lambda x: (-x["Nb_JO"], x["délégation"]))
 
-# --- Étape 4 : Affichage ---
-
+# On affiche le tableau créé.
 print(f"{'Délégation':30} | Nb_JO | Nb_JO_E | Nb_JO_H")
-print("-" * 60)
+print("=-" * 30)
 for r in resultats:
-    print(f"{r['délégation']:30} | {r['Nb_JO']:6} | {r['Nb_JO_E']:8} | {r['Nb_JO_H']:8}")
+    print(f"{r['délégation']:30} | {r['Nb_JO']:5} | {r['Nb_JO_E']:7} | {r['Nb_JO_H']:7}")
