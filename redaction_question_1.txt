@@ -1,0 +1,22 @@
+Question 1 : Déterminer le nombre de médailles remportées par Michael Phelps.
+Nom complet : Michael Fred Phelps, II
+
+Afin de répondre à cette question, nous avons commencé par examiner la structure des noms dans la base de données. Dans ce jeu de données, le nom de chaque athlète est enregistré sous forme d'une concaténation du prénom et du nom, ce qui peut poser des problèmes de cohérence (variations de casse, de caractère de séparation, d'espacement ou de ponctuation). Nous avons donc vérifié la présence de variantes du nom Michael Fred dans l'ensemble des données. L’exploration des données a montré qu’un seul athlète correspondait exactement au nom Michael Fred Phelps, II, ce qui limite à la fois le risque d’oubli d’une de ses participations et celui de confusion avec un éventuel homonyme. 
+
+Pour renforcer cette vérification, nous avons également pris en compte deux autres variables disponibles dans la base : l’âge et la nationalité (NOC). Ces éléments nous ont permis de confirmer que toutes les occurrences renvoyaient bien au même individu. En l’absence d’identifiant unique (comme un numéro de sécurité sociale), cette combinaison d’attributs fait office de clé d’identification approximative.
+
+Nous avons ensuite isolé les variables pertinentes pour l’analyse, à savoir : 'Year', 'Name', 'Event' et 'Medal'. Si seules les colonnes « Name » et « Medal » suffisent à comptabiliser les médailles, conserver l’année et l’épreuve permet d’effectuer des vérifications complémentaires, notamment pour identifier d’éventuels doublons. En effet, un athlète ne peut recevoir qu'une seule médaille par épreuve lors d'une édition donnée des Jeux Olympiques.
+
+Une vérification des modalités de la variable « Medal » a confirmé la cohérence des données :
+
+        ◦ Gold pour une médaille d’or
+        ◦ Silver pour une médaille d’argent
+        ◦ Bronze pour une médaille de bronze
+        ◦ NA indique qu'aucune médaille n’a été remportée
+
+Nous avons filtré toutes les lignes correspondant à Michael Fred Phelps, II et compté les occurrences pour chacune des trois modalités de médaille (en excluant les NA). Le total obtenu est de 28 médailles.
+
+Pour valider notre résultat, nous avons consulté la fiche officielle de Michael Phelps sur le site du Comité International Olympique : https://www.olympics.com/en/athletes/michael-phelps-ii
+
+Notre analyse concorde parfaitement avec les données officielles :
+Michael Phelps a remporté 23 médailles d’or, 3 d’argent et 2 de bronze, soit 28 médailles olympiques au total.
