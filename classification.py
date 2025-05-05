@@ -82,15 +82,12 @@ def construire_table_epreuves(donnees):
     table["Type collectif"] = (table["Type"] == "collectif").astype(int)
     return table
 
-
 # -----------------------------
 # Traitement par période
 # -----------------------------
 # les statistiques qui vont servir de caractéristiques (features) pour la classification
 colonnes_features = [
-    "Nb épreuves dans le sport",
     "Nb participants",
-    "Nb pays",
     "Part femmes",
     "Âge moyen",
     "Écart âge",
@@ -100,8 +97,6 @@ colonnes_features = [
     "Écart taille",
 ]
 
-colonnes_features += ["Année apparition"]
-colonnes_features += ["Type collectif"]
 
 # écoupage en 4 périodes de 25 ans
 periodes = {
@@ -131,7 +126,7 @@ for nom_periode, (debut, fin) in periodes.items():
     X_scaled = scaler.fit_transform(table[colonnes_features])
 
     # KMeans
-    kmeans = KMeans(n_clusters=4, random_state=0)
+    kmeans = KMeans(n_clusters=3, random_state=0)
     table["Cluster"] = kmeans.fit_predict(X_scaled)
 
     tables_par_periode.append(table)
@@ -146,6 +141,7 @@ X_pca = pca.fit_transform(X_scaled_all)
 
 table_periodes["Dim1"] = X_pca[:, 0]
 table_periodes["Dim2"] = X_pca[:, 1]
+
 
 # -----------------------------
 # Visualisation PCA
@@ -219,11 +215,6 @@ def interpreter_cluster(cluster_id, summary):
         texte += "- Épreuves individuelles\n"
     return texte
 
-
-# Exemple d'utilisation
-for i in range(cluster_summary.shape[0]):
-    print(interpreter_cluster(i, cluster_summary))
-    print("-" * 40)
 
 # -----------------------------
 # Export Excel

@@ -4,6 +4,9 @@
 # Combien en ont remporté la même année ?
 import os
 import csv
+import time
+
+start_time = time.time()
 
 # Lire le fichier CSV manuellement et stocker les lignes dans une liste
 
@@ -98,34 +101,6 @@ def trouver_athletes_ete_hiver(base):
 # Trouver les athlètes avec des médailles dans différentes saisons
 athletes_ete_hiver = trouver_athletes_ete_hiver(donnees_filtrees)
 
-# Afficher les résultats
-print("Athlètes ayant remporté des médailles dans différentes saisons :")
-for athlete in athletes_ete_hiver:
-    # Préparer la liste des années par saison
-    years_list = [
-        athlete["annees_saison"].get(saison, []) for saison in ["Summer", "Winter"]
-    ]
-
-    print(f"ID: {athlete['ID']}")
-    print(f"Nom: {athlete['Name']}")
-    print(f"Saisons: {athlete['Seasons']}")
-    print(f"Années: {years_list}")
-    print()
-
-# Afficher les résultats
-print("Athlètes ayant remporté des médailles dans différentes saisons la même année :")
-for athlete in athletes_ete_hiver:
-    # Préparer la liste des années par saison
-    years_list = [
-        athlete["annees_saison"].get(saison, []) for saison in ["Summer", "Winter"]
-    ]
-    if athlete["deux_saisons"]:
-        print(f"ID: {athlete['ID']}")
-        print(f"Nom: {athlete['Name']}")
-        print(f"Années: {years_list}")
-        print(f"Années communes: {sorted(athlete['deux_saisons'])}")
-        print()
-
 # Export csv
 nom_fichier_export = "athletes_multi_saisons.csv"
 with open(nom_fichier_export, "w", newline="") as fichier_csv:
@@ -157,3 +132,37 @@ with open(nom_fichier_export, "w", newline="") as fichier_csv:
                 ", ".join(map(str, athlete["deux_saisons"])),
             ]
         )
+
+end_time = time.time()
+
+# Afficher les résultats
+print("Athlètes ayant remporté des médailles dans différentes saisons :")
+for athlete in athletes_ete_hiver:
+    # Préparer la liste des années par saison
+    years_list = [
+        athlete["annees_saison"].get(saison, []) for saison in ["Summer", "Winter"]
+    ]
+
+    print(f"ID: {athlete['ID']}")
+    print(f"Nom: {athlete['Name']}")
+    print(f"Saisons: {athlete['Seasons']}")
+    print(f"Années: {years_list}")
+    print()
+
+# Afficher les résultats
+print("Athlètes ayant remporté des médailles dans différentes saisons la même année :")
+for athlete in athletes_ete_hiver:
+    # Préparer la liste des années par saison
+    years_list = [
+        athlete["annees_saison"].get(saison, []) for saison in ["Summer", "Winter"]
+    ]
+    if athlete["deux_saisons"]:
+        print(f"ID: {athlete['ID']}")
+        print(f"Nom: {athlete['Name']}")
+        print(f"Années: {years_list}")
+        print(f"Années communes: {sorted(athlete['deux_saisons'])}")
+        print()
+
+execution_time = end_time - start_time
+
+print(f"Le temps d'exécution du script en Pandas est de : {execution_time:.4f} s")

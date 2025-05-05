@@ -3,6 +3,9 @@
 # Only one of them, Christa Ludinger-Rothenburger, won medals in the same year.
 # Combien en ont remporté la même année ?
 import pandas as pd
+import time
+
+start_time = time.time()
 
 # Lire le fichier CSV
 donnees = pd.read_csv("athlete_events.csv")
@@ -72,6 +75,8 @@ athletes_ete_hiver = trouver_athletes_ete_hiver(
     donnees, fichier_excel="athletes_multi_saisons.xlsx"
 )
 
+end_time = time.time()
+
 # Afficher les résultats
 print("Athlètes ayant remporté des médailles dans différentes saisons :")
 for athlete in athletes_ete_hiver:
@@ -98,3 +103,7 @@ for athlete in athletes_ete_hiver:
         print(f"Années: {years_list}")
         print(f"Années communes: {sorted(athlete['deux_saisons'])}")
         print()
+
+execution_time = end_time - start_time
+
+print(f"Le temps d'exécution du script en Python pur est de : {execution_time:.4f} s")
