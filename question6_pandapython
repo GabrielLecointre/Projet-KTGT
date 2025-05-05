@@ -1,0 +1,73 @@
+# question : combien de sportifs ont changé de délégation ? dans quels sports ?
+
+import pandas as pd
+import os
+
+
+def chgt_delegation():
+
+    # Lire le fichier CSV
+    df = pd.read_csv("donnees/athlete_events.csv")
+
+    # Ne conserver que les colonnes utiles
+    donnees = df[['ID', 'Year', 'NOC', 'Sport']]
+
+    # Exclure les entrées "IOA", athlètes neutres
+    donnees1 = donnees[donnees["NOC"] != "IOA"]
+
+    # Compter le nombre de modalités distinctes de NOC pour chaque valeur de ID
+    multi_noc = donnees1.groupby('ID')['NOC'].nunique()
+
+    # Garder les valeurs de ID où NOC a plus d'une modalité
+    id_with_multiple_noc = multi_noc[multi_noc > 1].index
+
+# print(f"Nb de sportifs ayant représenté plusieurs pays : {len(id_with_multiple_noc)}")
+# résultat attendu : Nb de sportifs ayant représenté plusieurs pays : 1537
+
+    # question : combien de sports sont concernés ?
+
+    # Pour ces IDs, lister et compter les sports concernés
+    sports_for_these_ids = donnees1[donnees1['ID'].isin(id_with_multiple_noc)]['Sport']
+    sports_count = sports_for_these_ids.value_counts()
+
+# print("\nSports pratiqués par les IDs présents dans plusieurs pays :")
+# print(sports_count)
+
+    sports_count.to_csv('sports_count.csv', sep=';', encoding='utf-8', index=True)
+
+# print(f"\nNombre total de modalités de sports concernées : {len(sports_count)}")
+# résultat attendu : Nombre total de modalités de sports concernées : 47
+
+    # question : quel sport compte le plus de sportifs concernés ?
+    sport_max = sports_count.idxmax()
+    valeur_max = sports_count.max()
+# print(f"Sport le plus fréquent: {sport_max} ({valeur_max} occurrences)")
+# résultat attendu : Sport le plus fréquent: Athletics (862 occurrences)
+
+    # préparation de l'export
+    resultat_dict = {
+        "Intitulé": [
+            "Nombre de sportifs ayant représenté plusieurs pays",
+            "Nombre total de modalités de sports concernées",
+            "Sport le plus fréquent"
+        ],
+        "Résultat": [
+            len(id_with_multiple_noc),
+            len(sports_count),
+            f"{sport_max} ({valeur_max} occurrences)"
+        ]
+    }
+
+    resultat_df = pd.DataFrame(resultat_dict)
+
+    # Vérifier si le répertoire output existe, sinon le créer
+    output_dir = 'output'
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+    chemin_fichier = os.path.join(output_dir, 'changement_delegation.csv')
+
+    # Enregistrement
+    resultat_df.to_csv(chemin_fichier, sep=';', index=False, encoding='utf-8')
+    print(f"Résultats enregistrés dans : {chemin_fichier}")
+
+    return resultat_df
