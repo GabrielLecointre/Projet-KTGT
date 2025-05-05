@@ -59,8 +59,12 @@ def chgt_delegation():
     }
 
     resultat_df = pd.DataFrame(resultat_dict)
-    os.makedirs("output", exist_ok=True)
-    chemin_fichier = os.path.join('output', 'changement_delegation.csv')
+
+    # Vérifier si le répertoire output existe, sinon le créer
+    output_dir = 'output'
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+    chemin_fichier = os.path.join(output_dir, 'changement_delegation.csv')
 
     # Enregistrement
     resultat_df.to_csv(chemin_fichier, sep=';', index=False, encoding='utf-8')
