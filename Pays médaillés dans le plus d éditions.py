@@ -3,12 +3,15 @@
 # ATTENTION : CHANGER LE CHEMIN DU FICHIER SI BESOIN
 import pandas
 import os
+import time
 
 pandas.set_option("display.max_rows", 150)
 
-# Lire le fichier .csv avec la base de données (CHEMIN DU FICHIER)
+# Lire les fichiers .csv avec la base de données (CHEMIN DU FICHIER)
 BDJO = pandas.read_csv(os.path.join("donnees_jeux_olympiques", "athlete_events.csv"))
 pays = pandas.read_csv(os.path.join("donnees_jeux_olympiques", "noc_regions.csv"))
+
+debutchrono = time.time()
 
 BDJOpaysmedailles = BDJO.dropna(subset=["Medal"])
 # Je supprime les lignes sans médailles. Ne reste plus qu’or, argent et bronze.
@@ -141,6 +144,10 @@ paysmedailles_tri = paysmedailles.sort_values(
 
 # Afficher le résultat
 print(paysmedailles_tri)
+
+finchrono = time.time()
+tpsexe = finchrono - debutchrono
+print("Le temps d’exécution du programme est de", tpsexe, "seconde(s).")
 
 """Ce programme affiche :
                              Nb_JO  Nb_JO_E  Nb_JO_H
@@ -284,4 +291,5 @@ Sudan                            1        1        0
 Tanzania                         1        1        0
 Togo                             1        1        0
 Tonga                            1        1        0
-Virgin Islands, US               1        1        0"""
+Virgin Islands, US               1        1        0
+Le temps d’exécution du programme est de 0.21662521362304688 seconde(s)."""
