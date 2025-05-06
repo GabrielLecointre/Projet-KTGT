@@ -5,8 +5,8 @@ def test_resultats_nadia_comaneci_1976():
     # Charger les données
     donnees = pd.read_csv("athlete_events.csv")
 
-    # Filtrer Nadia Comăneci (recherche tolérante, insensible à la casse)
-    filtre_nom = donnees["Name"].str.lower().str.contains("comaneci")
+    # Filtrer Nadia Comăneci (recherche insensible à la casse)
+    filtre_nom = donnees["Name"].str.lower().str.contains("comneci")
     nadia = donnees[filtre_nom]
     nadia_1976 = nadia[nadia["Year"] == 1976]
 
