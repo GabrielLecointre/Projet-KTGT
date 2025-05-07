@@ -9,7 +9,6 @@ import time
 start_time = time.time()
 
 # Lire le fichier CSV manuellement et stocker les lignes dans une liste
-
 tableau = []
 with open(os.path.join("athlete_events.csv")) as donnees:
     file = csv.reader(donnees)
@@ -33,9 +32,9 @@ def trouver_athletes_ete_hiver(base):
     # Créer un dictionnaire pour stocker les informations par ID d'athlète
     athletes_par_id = {}
 
-    # Parcourir les données pour les regrouper par ID
+    # Parcourir les données pour les regrouper par ID de l'athlète
     for ligne in base:  # pour chaque ligne
-        id = ligne[0]  # on récupère le ID, position 0
+        id = ligne[0]  # on récupère le ID, c'est la position 0
         if id not in athletes_par_id:  # si l'ID n'existe pas
             athletes_par_id[id] = []  # on le crée
         athletes_par_id[id].append(ligne)  # et on ajoute la ligne correspondante
@@ -72,9 +71,11 @@ def trouver_athletes_ete_hiver(base):
                 medaille_annee[saison] = []
                 annees_saison[saison] = []
 
-                for p in participations:
-                    if p[10] == saison:
+                for p in participations:  # pour chaque enregistrement dans la liste
+                    if p[10] == saison:  # vérifie si la 11e colonne correspond
+                        # Si "Medal" est une clé dans p et que la saisonn existe
                         if "Medal" in p and p[10]:
+                            # on ajoute la dernière valeur de la ligne p
                             medaille_annee[saison].append(p[-1])
                         annees_saison[saison].append(p[9])
 

@@ -5,10 +5,12 @@ import pandas as pd
 # Lire le fichier CSV
 donnees = pd.read_csv("athlete_events.csv")
 
+# pour éviter de filtrer directement sur 1976 et sur Nadia Comăneci
 # Demander à l'utilisateur d'indiquer l'année et le sportif
 nom_sportif = input("Entrez le nom du sportif pour afficher ses résultats : ").lower()
 annee = int(input("Entrez l'année des Jeux Olympiques : "))
 
+# dans la base de données les caractères spéciaux ont été soit remplacés soit supprimés
 # Filtrer sur le nom (recherche partielle, insensible à la casse)
 filtre_nom = donnees["Name"].str.lower().str.contains(nom_sportif)
 sportif = donnees[filtre_nom]
@@ -17,7 +19,7 @@ sportif = donnees[filtre_nom]
 if sportif.empty:
     print("Aucun sportif trouvé avec ce nom.")
 else:
-    # Filtrer sur l'année
+    # Filtrer sur l'année souhaitée
     sportif_annee = sportif[sportif["Year"] == annee]
 
     if sportif_annee.empty:

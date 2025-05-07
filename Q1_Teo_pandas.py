@@ -14,7 +14,7 @@ donnees = pd.read_csv("athlete_events.csv")
 donnees = donnees[donnees["Medal"].notnull()]  # filtrer les données sauf NaN
 
 
-# Trouver les athlètes ayant participé aux Jeux d'été et d'hiver
+# Trouver les athlètes ayant participé à la fois aux Jeux d'été et d'hiver
 # les résultats seront exportés dans un fichier excel
 def trouver_athletes_ete_hiver(base, fichier_excel=None):
     athletes_par_id = base.groupby("ID")  # création d'un sous-DataFrame par ID
@@ -40,7 +40,7 @@ def trouver_athletes_ete_hiver(base, fichier_excel=None):
             annees_saison = {}
 
             for s in saison:
-                # premier génère une série de booléens selon la condition
+                # premier group génère une série de booléens selon la condition
                 # deuxième group garde uniquement les lignes où la condition est vraie
                 donnees_saison = group[group["Season"] == s]
                 # séparer les saisons

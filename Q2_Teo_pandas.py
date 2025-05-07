@@ -26,6 +26,10 @@ donnees_jo = pd.merge(
 print(donnees_jo.columns.tolist())
 
 
+# dans le total du nombre des médailles par pays il peut y avoir du double comptage
+# en raison des épreuves collectives (chaque membre de l'équipe reçoit une médaille)
+# pour corriger cela (au moins partiellement), nous considérons l'épreuve collective
+# si le nombre de médailles est >+ 6 (2*or, 2*argent, 2*bronze)
 def correct_medal_counts(donnees):
     corrected_rows = []
     for event, group in donnees.groupby("Event"):
@@ -70,7 +74,7 @@ def classement_jo(donnees, annee, nb_pays=15, fichier_excel=None):
         if medal not in medailles_par_pays.columns:
             medailles_par_pays[medal] = 0
 
-    # ordre d'affichage souhaité (pas alphabétique)
+    # ordre d'affichage souhaité (différent de alphabétique)
     medal_order = ["Gold", "Silver", "Bronze"]
 
     # imposer l'ordre souhaité
@@ -99,7 +103,7 @@ classement_1984 = classement_jo(
     donnees_jo, 1984, fichier_excel="classement_jo_1984.xlsx"
 )
 
-# Utilisation avec choix de l'année sans export
+# Utilisation sans export avec choix de l'année et du nb de pays à afficher
 annee = int(input("Pour quelle année souhaitez-vous afficher les résultats ? "))
 nb_pays = int(input("Combien de pays souhaitez-vous afficher ? "))
 
