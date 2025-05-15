@@ -1,6 +1,7 @@
 # Quels ont été les résultats spécifiques de Nadia Comăneci lors des JO de 1976?
 
 import pandas as pd
+import re
 
 # Lire le fichier CSV
 donnees = pd.read_csv("athlete_events.csv")
@@ -12,7 +13,16 @@ annee = int(input("Entrez l'année des Jeux Olympiques : "))
 
 # dans la base de données les caractères spéciaux ont été soit remplacés soit supprimés
 # Filtrer sur le nom (recherche partielle, insensible à la casse)
-filtre_nom = donnees["Name"].str.lower().str.contains(nom_sportif)
+# filtre_nom = donnees["Name"].str.lower().str.contains(nom_sportif)
+
+# Transformer la saisie en mots-clés séparés
+mots = nom_sportif.strip().lower().split()
+
+# Construire l'expression régulière : chaque mot doit apparaître, peu importe l’ordre
+pattern = ''.join(f'(?=.*{re.escape(mot)})' for mot in mots)
+
+# Appliquer le filtre avec regex=True et case=False
+filtre_nom = donnees["Name"].str.lower().str.contains(pattern, regex=True)
 sportif = donnees[filtre_nom]
 
 # Vérifier si des données existent
